@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import DisplayMadLib from './DisplayMadLib';
+import useChangeState from './hooks/useChangeState';
+
+
 
 const MadLibForm = () => {
     const INITIALSTATE = {
@@ -10,6 +14,9 @@ const MadLibForm = () => {
 
 
     const [formData, setFormData] = useState(INITIALSTATE)
+    const [showForm, hideForm] = useChangeState(true)
+    const [showPhrase, hidePhrase] = useChangeState(false)
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -21,13 +28,14 @@ const MadLibForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        // create a function here that adds the object values from formData into a random madlib
-        setFormData(INITIALSTATE)
+        hideForm(false)
+        hidePhrase(true)
     }
 
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
+        {showForm && <form onSubmit={handleSubmit}>
             <input 
                 type='text'
                 id='noun'
@@ -61,7 +69,10 @@ const MadLibForm = () => {
                 onChange={handleChange}
             />
             <button>Get Story</button>
-        </form>
+        </form>}
+        
+        {showPhrase && <DisplayMadLib color={formData.color} noun={formData.noun} adjective={formData.adjective} noun2={formData.noun2} />}
+        </div>
     )
 }
 
